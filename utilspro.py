@@ -18,4 +18,23 @@ def custom_date_parser(date_str):
     except ValueError:
         # If the above fails, try the format "X/X/X H:M"
         return datetime.datetime.strptime(date_str, "%d/%m/%Y %H:%M")
+    
+
+# write the custom parser to parse in addition dates of type "%d-%m-%Y %H:%M:%S" and "%d/%m/%Y %H:%M:%S" and "%d-%m-%Y %H:%M" and "%d/%m/%Y %H:%M"
+def robust_date_parser(date_str):
+    try:
+        # First, try the format "X-X-X H:M:S"
+        return datetime.datetime.strptime(date_str, "%d-%m-%Y %H:%M:%S")
+    except ValueError:
+        try:
+            # If the above fails, try the format "X/X/X H:M:S"
+            return datetime.datetime.strptime(date_str, "%d/%m/%Y %H:%M:%S")
+        except ValueError:
+            try:
+                # If the above fails, try the format "X-X-X H:M"
+                return datetime.datetime.strptime(date_str, "%d-%m-%Y %H:%M")
+            except ValueError:
+                # If the above fails, try the format "X/X/X H:M"
+                return datetime.datetime.strptime(date_str, "%d/%m/%Y %H:%M")
+
 
