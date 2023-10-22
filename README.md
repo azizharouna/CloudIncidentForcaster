@@ -1,7 +1,6 @@
 # CloudIncidentForecaster
 
 CloudIncidentForecaster is a state-of-the-art incident management solution crafted to predict, categorize, and manage incidents within cloud-based systems. Drawing insights from historical incident data, the project not only forecasts the probable locations of future incidents but also estimates their resolution duration, enabling more efficient and proactive incident management.
-Data source : the event log was extracted from data gathered from the audit system of an instance of the ServiceNow platform used by an IT company and enriched with data loaded from a relational database.
 
 **Data Source**: The event log was sourced from the audit system of a ServiceNow platform instance utilized by an IT company and was enriched with data from a relational database.
 
