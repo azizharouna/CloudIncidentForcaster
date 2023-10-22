@@ -39,7 +39,7 @@ def robust_date_parser(date_str):
                 return datetime.datetime.strptime(date_str, "%d/%m/%Y %H:%M")
             
 
-
+'''
 class SmartEncoder:
     def __init__(self, 
                  one_hot_cols=[], 
@@ -68,23 +68,26 @@ class SmartEncoder:
             encoder = ce.BinaryEncoder()
             encoder.fit(df[column])
             self.encoders[column] = encoder
+        #else: 
+        # Check if column is categorical
         else:
-            # Determine encoding method based on unique values
-            unique_values = df[column].nunique()
-            if unique_values <= 15:
-                self.encoders[column] = 'one_hot'
-            elif unique_values <= 100:
-                self.encoders[column] = 'label'
-            elif unique_values <= 1000:
-                if target_column is None:
-                    raise ValueError("Target column must be provided for target encoding.")
-                encoder = ce.TargetEncoder()
-                encoder.fit(df[column], df[target_column])
-                self.encoders[column] = encoder
-            else:
-                encoder = ce.BinaryEncoder()
-                encoder.fit(df[column])
-                self.encoders[column] = encoder
+            if df[column].dtype == 'object' or df[column].dtype.name == 'category':
+                # Determine encoding method based on unique values
+                unique_values = df[column].nunique()
+                if unique_values <= 15:
+                    self.encoders[column] = 'one_hot'
+                elif unique_values <= 100:
+                    self.encoders[column] = 'label'
+                elif unique_values <= 1000:
+                    if target_column is None:
+                        raise ValueError("Target column must be provided for target encoding.")
+                    encoder = ce.TargetEncoder()
+                    encoder.fit(df[column], df[target_column])
+                    self.encoders[column] = encoder
+                else:
+                    encoder = ce.BinaryEncoder()
+                    encoder.fit(df[column])
+                    self.encoders[column] = encoder
 
     def transform(self, df, column):
         encoder = self.encoders.get(column)
@@ -116,10 +119,12 @@ class SmartEncoder:
 
 # encoder = SmartEncoder(one_hot_cols=['col1'], label_cols=['col2'], target_cols=['col3'])
 # encoded_df = encoder.fit_transform(df, 'col_name', target_column='target')
-
+'''
 
 # second version of the SmartEncoder class 
-'''
+
+
+
 class SmartEncoder:
     def __init__(self, 
                  one_hot_cols=[], 
@@ -132,69 +137,57 @@ class SmartEncoder:
         self.binary_cols = binary_cols
         self.encoders = {}
     
-    def fit(self, df, column, target_column=None):
-        # If column is specified by the user
-        if column in self.one_hot_cols:
-            self.encoders[column] = 'one_hot'
-        elif column in self.label_cols:
-            self.encoders[column] = 'label'
-        elif column in self.target_cols:
-            if target_column is None:
-                raise ValueError("Target column must be provided for target encoding.")
-            encoder = ce.TargetEncoder()
-            encoder.fit(df[column], df[target_column])
-            self.encoders[column] = encoder
-        elif column in self.binary_cols:
-            encoder = ce.BinaryEncoder()
-            encoder.fit(df[column])
-            self.encoders[column] = encoder
-        elif df[column].dtype == 'object' or df[column].dtype.name == 'category':  # Check if column is categorical
-            # Determine encoding method based on unique values
-            unique_values = df[column].nunique()
-            if unique_values <= 15:
+    def fit(self, df, target_column=None):
+        for column in df.columns:
+            if column in self.one_hot_cols:
                 self.encoders[column] = 'one_hot'
-            elif unique_values <= 100:
+            elif column in self.label_cols:
                 self.encoders[column] = 'label'
-            elif unique_values <= 1000:
+            elif column in self.target_cols:
                 if target_column is None:
                     raise ValueError("Target column must be provided for target encoding.")
-                encoder = ce.TargetEncoder()
+                encoder = ce.TargetEncoder()  # Commented out since category_encoders is not available
                 encoder.fit(df[column], df[target_column])
                 self.encoders[column] = encoder
-            else:
-                encoder = ce.BinaryEncoder()
+            elif column in self.binary_cols:
+                encoder = ce.BinaryEncoder()  
                 encoder.fit(df[column])
                 self.encoders[column] = encoder
+            elif df[column].dtype == 'object' or df[column].dtype.name == 'category':
+                unique_values = df[column].nunique()
+                if unique_values <= 15:
+                    self.encoders[column] = 'one_hot'
+                elif unique_values <= 100:
+                    self.encoders[column] = 'label'
+                
+                else:
+                     encoder = ce.BinaryEncoder()
+                     encoder.fit(df[column])
+                     self.encoders[column] = encoder
 
-    def transform(self, df, column):
-        encoder = self.encoders.get(column)
+    def transform(self, df):
+        for column, encoder in self.encoders.items():
+            if encoder == 'one_hot':
+                df = pd.get_dummies(df, columns=[column], drop_first=True)
+            elif encoder == 'label':
+                df[column + '_encoded'] = df[column].astype('category').cat.codes
+                df = df.drop(columns=[column])
+            # Commented out target encoding and binary encoding due to unavailability of category_encoders
+            else:  
+                 encoded_col = encoder.transform(df[column])
+                 if isinstance(encoded_col, pd.DataFrame):
+                     df = pd.concat([df, encoded_col], axis=1)
+                     df = df.drop(columns=[column])
+                 else:
+                     df[column + '_encoded'] = encoded_col
+                     df = df.drop(columns=[column])
+        return df
 
-        # Apply appropriate encoding based on the encoder determined during fit
-        if encoder == 'one_hot':
-            return pd.get_dummies(df, columns=[column], drop_first=True)
-        
-        elif encoder == 'label':
-            df[column + '_encoded'] = df[column].astype('category').cat.codes
-            return df.drop(columns=[column])
-        
-        elif encoder == 'high_cardinality':
-            print(f"The column '{column}' has extremely high cardinality. Consider using advanced methods.")
-            return df
-        
-        else:  # For target and binary encoders
-            encoded_col = encoder.transform(df[column])
-            if isinstance(encoded_col, pd.DataFrame):  # For binary encoder which returns multiple columns
-                df = pd.concat([df, encoded_col], axis=1)
-                return df.drop(columns=[column])
-            else:  # For target encoder
-                df[column + '_encoded'] = encoded_col
-                return df.drop(columns=[column])
+    def fit_transform(self, df, target_column=None):
+        self.fit(df, target_column)
+        return self.transform(df)
 
-    def fit_transform(self, df, column, target_column=None):
-        self.fit(df, column, target_column)
-        return self.transform(df, column)
+# Example Usage:
+# encoder = SmartEncoder(one_hot_cols=['col1'], label_cols=['col2'])
+# encoded_df = encoder.fit_transform(data_cleaning, target_column='active')
 
-
-# encoder = SmartEncoder(one_hot_cols=['col1'], label_cols=['col2'], target_cols=['col3'])
-# encoded_df = encoder.fit_transform(df, 'col_name', target_column='target')
-'''
