@@ -117,6 +117,3 @@ class SmartEncoder:
 # Example Usage:
 # encoder = SmartEncoder(one_hot_cols=['col1'], label_cols=['col2'], target_cols=['col3'])
 # encoded_df = encoder.fit_transform(df, 'col_name', target_column='target')
-        
-
-
