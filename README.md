@@ -1,6 +1,7 @@
 # CloudLogPredictor
 
 CloudLogPredictor is an innovative log analytics project aimed at foreseeing and pinpointing incidents within a cloud-based system architecture before they transpire. Utilizing real-world log data, this project seeks to not only identify potential incidents but also determine their probable locations, thereby enabling a proactive approach to incident management.
+Data source : the event log was extracted from data gathered from the audit system of an instance of the ServiceNow platform used by an IT company and enriched with data loaded from a relational database.
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
