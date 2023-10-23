@@ -1,8 +1,8 @@
-# CloudLogPredictor
+# CloudIncidentForecaster
 
-CloudLogPredictor is an innovative log analytics project aimed at foreseeing and pinpointing incidents within a cloud-based system architecture before they transpire. Utilizing real-world log data, this project seeks to not only identify potential incidents but also determine their probable locations, thereby enabling a proactive approach to incident management.
+CloudIncidentForecaster is a state-of-the-art incident management solution crafted to predict, categorize, and manage incidents within cloud-based systems. Drawing insights from historical incident data, the project not only forecasts the probable locations of future incidents but also estimates their resolution duration, enabling more efficient and proactive incident management.
 
-Data source : the event log was extracted from data gathered from the audit system of an instance of the ServiceNow platform used by an IT company and enriched with data loaded from a relational database.
+**Data Source**: The event log was sourced from the audit system of a ServiceNow platform instance utilized by an IT company and was enriched with data from a relational database.
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
@@ -14,31 +14,32 @@ Data source : the event log was extracted from data gathered from the audit syst
 7. [Acknowledgments](#acknowledgments)
 
 ## Project Overview
-- **Goal**: 
-    - Anticipate incidents within the system architecture.
-    - Determine the likely locations of these incidents.
-    - Utilize Key Performance Indicators (KPIs) to evaluate and enhance the system's predictive accuracy.
+- **Goals**: 
+    - Predict the probable locations of upcoming incidents.
+    - Estimate the time required to resolve these incidents.
+    - Categorize incidents into meaningful groups to reveal patterns and streamline processes.
+    - Use Key Performance Indicators (KPIs) to measure and refine the system's predictive capabilities.
 
 - **Features**:
-    - Real-time log analytics.
-    - Incident prediction utilizing machine learning models.
-    - Dashboard for monitoring and visualization.
-    - Alerting system for incident notifications.
+    - Real-time incident analytics.
+    - Predictive modeling using machine learning techniques.
+    - Interactive dashboard for monitoring, visualization, and insights.
+    - Alerting system for real-time incident notifications.
 
 - **Technologies Used**:
     - Cloud Providers: (TBD).
-    - Log Analytics Tools: (TBD)
+    - Incident Analytics Tools: (TBD)
 
 ## Getting Started
 
 ### Installation
-(TBD: Detailed steps on setting up the cloud environment, installing necessary tools and libraries.)
+(TBD: Detailed steps on setting up the cloud environment, installing required tools, and libraries.)
 
 ## Usage
-(TBD: Instructions on how to use the system, run analytics, and interpret results.)
+(TBD: Guidelines on how to use the system, initiate forecasts, and interpret findings.)
 
 ## Contributing
-We welcome contributions from the community. Please read the contributing guidelines for more information.
+We invite contributions from the community. Please consult the contributing guidelines for further details.
 
 ## License
 (TBD)
