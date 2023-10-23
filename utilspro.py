@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
 import category_encoders as ce
+import numpy as np
 
 # Unzipping the provided dataset
 with zipfile.ZipFile("incident+management+process+enriched+event+log.zip", 'r') as z:
