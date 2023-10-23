@@ -193,3 +193,34 @@ class SmartEncoder:
 # encoder = SmartEncoder(one_hot_cols=['col1'], label_cols=['col2'])
 # encoded_df = encoder.fit_transform(data_cleaning, target_column='active')
 
+
+
+from collections import Counter
+
+class DataInfo:
+    def __init__(self, df):
+        self.data = df
+        self.info_df = None
+
+    def generate_basic_info(self):
+        # ... [code for basic info df as previously described] ...
+        # This method sets self.info_df with the basic info table
+        
+    def three_most_common(self, lst):
+        # ... [code for three_most_common as previously described] ...
+        
+    def enhance_info_df(self):
+        # ... [code for enhance_info_df as previously described] ...
+        # This method updates self.info_df with enhanced info
+        
+    def get_info(self):
+        if self.info_df is None:
+            self.generate_basic_info()
+            self.enhance_info_df()
+        return self.info_df
+
+# Example of usage:
+# assuming `data` is your DataFrame
+info_extractor = DataInfo(data)
+info_table = info_extractor.get_info()
+print(info_table)
